@@ -1,0 +1,29 @@
+{
+  "name": "daily-list-widget",
+  "version": "1.0.0",
+  "description": "A calm Windows desktop daily todo widget",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.dailylist.widget",
+    "productName": "每日清单",
+    "files": [
+      "src/**/*",
+      "assets/daily-list.ico",
+      "package.json"
+    ],
+    "win": {
+      "target": "portable",
+      "icon": "assets/daily-list.ico"
+    }
+  }
+}

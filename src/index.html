@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日清单</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="widget">
+    <header class="titlebar">
+      <div class="brand"><span class="brand-mark">✓</span><span>DAILY</span></div>
+      <div class="window-actions">
+        <button id="pinBtn" class="icon-btn" title="置顶" aria-label="置顶"><svg viewBox="0 0 24 24"><path d="M9 4h6l-1 5 3 3v1H7v-1l3-3-1-5Zm3 9v7"/></svg></button>
+        <button id="collapseBtn" class="icon-btn" title="收起" aria-label="收起"><svg viewBox="0 0 24 24"><path d="m7 14 5-5 5 5"/></svg></button>
+        <button id="minBtn" class="icon-btn" title="最小化" aria-label="最小化"><svg viewBox="0 0 24 24"><path d="M7 12h10"/></svg></button>
+        <button id="closeBtn" class="icon-btn close" title="关闭" aria-label="关闭"><svg viewBox="0 0 24 24"><path d="m8 8 8 8m0-8-8 8"/></svg></button>
+      </div>
+    </header>
+
+    <section class="content">
+      <div class="date-row">
+        <div>
+          <p id="weekday" class="eyebrow"></p>
+          <h1><span id="dateTitle"></span><i></i></h1>
+        </div>
+        <div class="progress-ring" id="progressRing"><span id="progressText">0%</span></div>
+      </div>
+
+      <nav class="day-switch" aria-label="清单日期">
+        <button class="day-tab active" data-view="today">今天</button>
+        <button class="day-tab" data-view="tomorrow">明天</button>
+        <span class="day-indicator"></span>
+      </nav>
+
+      <form id="taskForm" class="add-form">
+        <span class="plus"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+        <div class="task-compose">
+          <div class="project-picker">
+            <select id="projectSelect" class="native-project-select" aria-label="所属项目" tabindex="-1">
+              <option value="">日常事项</option>
+            </select>
+            <button id="projectPickerButton" class="project-picker-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <svg class="project-picker-icon" viewBox="0 0 24 24"><path d="M5 6h14M5 12h14M5 18h9"/></svg>
+              <span id="projectPickerLabel">日常事项</span>
+              <svg class="project-picker-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></svg>
+            </button>
+            <div id="projectPickerMenu" class="project-picker-menu hidden" role="listbox"></div>
+          </div>
+          <textarea id="taskInput" maxlength="240" rows="1" placeholder="添加今天要做的事…" required></textarea>
+        </div>
+        <button type="submit">添加</button>
+      </form>
+
+      <section class="projects-panel">
+        <button id="toggleProjects" class="projects-toggle" type="button" aria-expanded="false">
+          <span><svg viewBox="0 0 24 24"><path d="M4 7h6l2 2h8v10H4V7Z"/></svg>长期项目</span>
+          <small id="projectSummary">点击查看</small>
+          <svg class="projects-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4"/></svg>
+        </button>
+        <div id="projectsBody" class="projects-body hidden">
+          <div class="section-title">
+            <span>项目管理</span>
+            <button id="toggleProjectForm" class="text-btn">＋ 新建</button>
+          </div>
+          <form id="projectForm" class="project-form hidden">
+            <input id="projectInput" maxlength="40" autocomplete="off" placeholder="项目名称" required>
+            <button type="submit">创建</button>
+          </form>
+          <div id="projectList" class="project-list"></div>
+        </div>
+      </section>
+
+      <section id="carryPanel" class="carry-panel hidden">
+        <div class="carry-head">
+          <div><strong>昨日未完成</strong><p>选择要带到今天的事项</p></div>
+          <button id="dismissCarry" class="text-btn">全部舍弃</button>
+        </div>
+        <div id="carryList"></div>
+      </section>
+
+      <div class="list-heading"><span id="listDayLabel">今天</span><span id="taskCount">0 项</span></div>
+      <div id="taskList" class="task-list"></div>
+      <div id="emptyState" class="empty-state">
+        <div class="empty-mark"><span></span><span></span><span></span></div>
+        <p>留一点空间给今天</p><span>从一件值得完成的小事开始</span>
+      </div>
+      <button id="clearDone" class="clear-btn hidden">清除已完成事项</button>
+    </section>
+
+    <section id="calendarModal" class="calendar-modal hidden" aria-modal="true" role="dialog">
+      <div class="calendar-card">
+        <div class="calendar-top">
+          <div><p>项目日历</p><h2 id="calendarProjectName"></h2></div>
+          <button id="closeCalendar" class="modal-close" aria-label="关闭">×</button>
+        </div>
+        <div class="calendar-nav">
+          <button id="prevMonth" aria-label="上个月">‹</button>
+          <strong id="calendarMonth"></strong>
+          <button id="nextMonth" aria-label="下个月">›</button>
+        </div>
+        <div class="calendar-weekdays"><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>日</span></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+        <section id="dayDetailsModal" class="day-details-modal hidden" aria-modal="true" role="dialog">
+          <div class="day-details-card">
+            <div class="day-details-top">
+              <div><p>当日进展</p><h3 id="dayDetailsTitle"></h3></div>
+              <button id="closeDayDetails" class="modal-close" aria-label="关闭当天详情">×</button>
+            </div>
+            <div id="calendarDetails" class="calendar-details"></div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

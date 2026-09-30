@@ -1,0 +1,14 @@
+node_modules/
+dist/
+out/
+release/
+
+*.log
+*.tmp
+.env
+.env.*
+!.env.example
+
+daily-list-data.json
+.agents/
+.codex/
